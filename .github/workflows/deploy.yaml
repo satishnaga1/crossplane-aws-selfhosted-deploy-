@@ -10,6 +10,7 @@ on:
 jobs:
   deploy:
     runs-on: self-hosted  # Uses your local Windows 11 runner
+
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v4
@@ -20,10 +21,12 @@ jobs:
           kubectl version --client
 
       - name: Set KUBECONFIG (for kind)
+        shell: pwsh
         run: |
-          echo "Setting KUBECONFIG to access kind cluster"
-          $env:KUBECONFIG="$HOME\.kube\config"
-          kubectl config current-context
+         echo "Setting KUBECONFIG to access kind cluster"
+         $env:KUBECONFIG="$HOME\.kube\config"
+         kubectl config current-context
+
 
       - name: Apply ProviderConfig
         run: kubectl apply -f crossplane/providerconfig.yaml
