@@ -6,38 +6,36 @@ on:
       - main
     paths:
       - 'crossplane/**'
-  workflow_dispatch:  # Allows manual triggering from GitHub UI
+  workflow_dispatch:
 
 jobs:
   deploy:
-    runs-on: self-hosted  # Your self-hosted Windows 11 runner
+    runs-on: self-hosted  # Your Linux-based runner (e.g., Ubuntu with kind)
 
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Install kubectl using Chocolatey
-        shell: pwsh
+      - name: Install kubectl (Linux)
         run: |
-          choco install kubernetes-cli -y
+          sudo apt-get update
+          sudo apt-get install -y curl
+          curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+          chmod +x kubectl
+          sudo mv kubectl /usr/local/bin/
           kubectl version --client
 
       - name: Set KUBECONFIG for kind cluster
-        shell: pwsh
         run: |
           echo "Setting KUBECONFIG..."
-          $env:KUBECONFIG="$HOME\.kube\config"
-          echo "Current context:"
+          export KUBECONFIG="$HOME/.kube/config"
           kubectl config current-context
 
       - name: Apply ProviderConfig
-        shell: pwsh
         run: kubectl apply -f crossplane/providerconfig.yaml
 
       - name: Apply VPC
-        shell: pwsh
         run: kubectl apply -f crossplane/vpc.yaml
 
       - name: Apply EC2 Instance
-        shell: pwsh
         run: kubectl apply -f crossplane/instance.yaml
