@@ -5,7 +5,7 @@ metadata:
 spec:
   forProvider:
     region: us-east-1
-    cidrBlock: 10.0.0.0/18
+    cidrBlock: 10.0.0.0/16
     enableDnsSupport: true
     enableDnsHostNames: true
     instanceTenancy: default
