@@ -1,4 +1,4 @@
-name: AWS Resources via Crossplane
+name: Deploy AWS Resources via Crossplane
 
 on:
   push:
@@ -6,33 +6,38 @@ on:
       - main
     paths:
       - 'crossplane/**'
+  workflow_dispatch:  # Allows manual triggering from GitHub UI
 
 jobs:
   deploy:
-    runs-on: self-hosted  # Uses your local Windows 11 runner
+    runs-on: self-hosted  # Your self-hosted Windows 11 runner
 
     steps:
-      - name: Checkout Repo
+      - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Set up kubectl
+      - name: Install kubectl using Chocolatey
+        shell: powershell
         run: |
           choco install kubernetes-cli -y
           kubectl version --client
 
-      - name: Set KUBECONFIG (for kind)
-        shell: pwsh
+      - name: Set KUBECONFIG for kind cluster
+        shell: powershell
         run: |
-         echo "Setting KUBECONFIG to access kind cluster"
-         $env:KUBECONFIG="$HOME\.kube\config"
-         kubectl config current-context
-
+          echo "Setting KUBECONFIG..."
+          $env:KUBECONFIG="$HOME\.kube\config"
+          echo "Current context:"
+          kubectl config current-context
 
       - name: Apply ProviderConfig
+        shell: powershell
         run: kubectl apply -f crossplane/providerconfig.yaml
 
       - name: Apply VPC
+        shell: powershell
         run: kubectl apply -f crossplane/vpc.yaml
 
       - name: Apply EC2 Instance
+        shell: powershell
         run: kubectl apply -f crossplane/instance.yaml
