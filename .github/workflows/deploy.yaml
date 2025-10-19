@@ -1,4 +1,4 @@
-name: Deploy AWS Resources via Crossplane
+name: AWS Resources via Crossplane
 
 on:
   push:
