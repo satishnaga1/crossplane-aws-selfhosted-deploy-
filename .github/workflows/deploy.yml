@@ -17,13 +17,13 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Install kubectl using Chocolatey
-        shell: powershell
+        shell: pwsh
         run: |
           choco install kubernetes-cli -y
           kubectl version --client
 
       - name: Set KUBECONFIG for kind cluster
-        shell: powershell
+        shell: pwsh
         run: |
           echo "Setting KUBECONFIG..."
           $env:KUBECONFIG="$HOME\.kube\config"
@@ -31,13 +31,13 @@ jobs:
           kubectl config current-context
 
       - name: Apply ProviderConfig
-        shell: powershell
+        shell: pwsh
         run: kubectl apply -f crossplane/providerconfig.yaml
 
       - name: Apply VPC
-        shell: powershell
+        shell: pwsh
         run: kubectl apply -f crossplane/vpc.yaml
 
       - name: Apply EC2 Instance
-        shell: powershell
+        shell: pwsh
         run: kubectl apply -f crossplane/instance.yaml
