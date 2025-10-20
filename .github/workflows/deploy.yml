@@ -16,20 +16,7 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Install kubectl (Linux)
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y curl
-          curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
-          chmod +x kubectl
-          sudo mv kubectl /usr/local/bin/
-          kubectl version --client
-
-      - name: Set KUBECONFIG for kind cluster
-        run: |
-          echo "Setting KUBECONFIG..."
-          export KUBECONFIG="$HOME/.kube/config"
-          kubectl config current-context
+ 
 
       - name: Apply ProviderConfig
         run: kubectl apply -f crossplane/providerconfig.yaml
