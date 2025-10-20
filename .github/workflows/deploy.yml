@@ -1,28 +1,22 @@
-name: Deploy AWS Resources via Crossplane
+name: Deploy EC2 via Crossplane
 
 on:
   push:
-    branches:
-      - main
     paths:
       - 'crossplane/**'
-  workflow_dispatch:
 
 jobs:
   deploy:
-    runs-on: self-hosted  # Your Linux-based runner (e.g., Ubuntu with kind)
+    runs-on: self-hosted  # Points to your Windows 11 runner
 
     steps:
-      - name: Checkout Repository
+      - name: Checkout code
         uses: actions/checkout@v4
 
- 
-
       - name: Apply ProviderConfig
-        run: kubectl apply -f crossplane/providerconfig.yaml
+        run: kubectl apply -f crossplane\providerconfig.yaml
         shell: pwsh
-      - name: Apply VPC
-        run: kubectl apply -f crossplane/vpc.yaml
 
-      - name: Apply EC2 Instance
-        run: kubectl apply -f crossplane/instance.yaml
+      - name: Apply EC2 resource
+        run: kubectl apply -f crossplane\vpc.yaml
+        shell: pwsh
