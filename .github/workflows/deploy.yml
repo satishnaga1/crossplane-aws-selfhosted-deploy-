@@ -4,7 +4,7 @@ on:
   push:
     paths:
       - 'crossplane/**'
-
+  workflow_dispatch:
 jobs:
   deploy:
     runs-on: self-hosted  # Points to your Windows 11 runner
