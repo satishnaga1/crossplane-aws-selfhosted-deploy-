@@ -20,7 +20,7 @@ jobs:
 
       - name: Apply ProviderConfig
         run: kubectl apply -f crossplane/providerconfig.yaml
-
+        shell: pwsh
       - name: Apply VPC
         run: kubectl apply -f crossplane/vpc.yaml
 
