@@ -12,11 +12,14 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-
+      - name: Set KUBECONFIG environment (if needed)
+        run: |
+            $env:KUBECONFIG="$HOME\.kube\config"
+        shell: powershell
       - name: Apply ProviderConfig
-        run: kubectl apply -f crossplane\providerconfig.yaml
+        run: kubectl apply -f crossplane
         shell: pwsh
 
-      - name: Apply EC2 resource
-        run: kubectl apply -f crossplane\vpc.yaml
-        shell: pwsh
+      #- name: Apply EC2 resource
+       # run: kubectl apply -f crossplane\vpc.yaml
+        #shell: pwsh
